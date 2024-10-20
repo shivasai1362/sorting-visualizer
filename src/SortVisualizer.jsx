@@ -26,18 +26,27 @@ function SortVisualizer() {
       setSize((prev) => newObj);
     }
     window.addEventListener("resize", handleResize);
-    if (val > winSize.calcSize) {
-      createNewArray(val);
-      setVal((prev) => winSize.calcSize);
+
+    if(arr.length > winSize.calcSize){
+      setArr(prevArr => prevArr.slice(0,winSize.calcSize))
     }
 
     return () => {
       window.removeEventListener("resize", handleResize);
     };
-  }, [winSize]);
+  }, [winSize,arr.length]);
 
   function randomInt(min, max) {
     return Math.floor(Math.random() * (max - min) + min);
+  }
+
+  function createArrOnValid(){
+    if (val >= 20 && val <= winSize.calcSize ){
+      createNewArray(val);
+    }
+    else{
+      alert("Limit under or exceeded");
+    }
   }
 
   function createNewArray(n) {
@@ -369,11 +378,7 @@ function SortVisualizer() {
             <CustomButton
               text={"Create Array"}
               disabled={!notRunning}
-              handleClick={() => {
-                val >= 20 && val <= winSize.calcSize
-                  ? createNewArray(val)
-                  : alert("Limit Under or exceeded");
-              }}
+              handleClick={createArrOnValid}
             />
             <CustomInput
               handleChange={(e) => {
